@@ -16,9 +16,37 @@
     "phoneInvalid": "الرجاء إدخال رقم هاتف صحيح",
     "pinCodeError": "رمز غير صالح"
   },
-  "onboardingWelcomeTo": "مرحبًا بك في",
-  "onboardingFloweryRiderApp": "تطبيق فلاوري رايدر",
-  "onboardingLogin": "تسجيل الدخول",
-  "onboardingApplyNow": "تقدم الآن",
-  "onboardingVersion": "إصدار {6.3.0} - ({446})"
+  "onboarding": {
+    "welcomeTo": "مرحبًا بك في",
+    "floweryRiderApp": "تطبيق فلاوري رايدر",
+    "login": "تسجيل الدخول",
+    "applyNow": "تقدم الآن",
+    "version": "إصدار {6.3.0} - ({446})"
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": {
+        "label": "البريد الإلكتروني",
+        "hint": "أدخل عنوان بريدك الإلكتروني"
+      },
+      "password": {
+        "label": "كلمة المرور",
+        "hint": "أدخل كلمة المرور الخاصة بك"
+      },
+      "remember_me": "تذكرني",
+      "forgot_password": "نسيت كلمة المرور؟",
+      "login_button": "تسجيل الدخول"
+    },
+    "forgot_password": {
+      "title": "كلمة المرور",
+      "heading": "نسيت كلمة المرور",
+      "instruction": "الرجاء إدخال بريدك الإلكتروني المرتبط بحسابك",
+      "email": {
+        "label": "البريد الإلكتروني",
+        "hint": "أدخل عنوان بريدك الإلكتروني"
+      },
+      "confirm_button": "تأكيد"
+    }
+  }
 }

@@ -37,9 +37,9 @@ ThemeData getLightTheme() => ThemeData(
           disabledForegroundColor: AppColors.scaffoldBackground,
           // elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.r), 
+            borderRadius: BorderRadius.circular(25.r),
           ),
-          minimumSize: Size(double.infinity, 50.h), 
+          minimumSize: Size(double.infinity, 50.h),
         ),
       ),
       //outlined button theme

@@ -18,9 +18,35 @@
   },
   "onboarding": {
     "welcomeTo": "Welcome to",
-    "floweryRiderApp": "Flowery rider app",
+    "floweryRiderApp":  "Flowery rider app",
     "login": "Login",
-    "applyNow": "Apply now",
-    "version": "v 6.3.0 - (446)"
+    "applyNow":  "Apply now",
+    "version":  "v 6.3.0 - (446)"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": {
+        "label": "Email",
+        "hint": "Enter your email address"
+      },
+      "password": {
+        "label": "Password",
+        "hint": "Enter your password"
+      },
+      "remember_me": "Remember me",
+      "forgot_password": "Forgot Password?",
+      "login_button": "Login"
+    },
+    "forgot_password": {
+      "title": "Password",
+      "heading": "Forget Password",
+      "instruction": "Please enter your email to associate to your account",
+      "email": {
+        "label": "Email",
+        "hint": "Enter your email address"
+      },
+      "confirm_button": "Confirm"
+    }
   }
 }
