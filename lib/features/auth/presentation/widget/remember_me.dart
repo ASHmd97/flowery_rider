@@ -15,19 +15,14 @@ class RememberMe extends StatefulWidget {
 }
 
 class _RememberMeState extends State<RememberMe> {
-  // Initialize with a default value instead of using late
   bool value = false;
 
   @override
   void initState() {
     super.initState();
-    // Get the initial value from the AuthCubit
     try {
-      if (context.read<AuthCubit>() != null) {
-        value = context.read<AuthCubit>().rememberMe;
-      }
-    } catch (e) {
-      // Handle the case when AuthCubit is not available
+      value = context.read<AuthCubit>().rememberMe;
+        } catch (e) {
       value = false;
     }
   }
@@ -51,10 +46,9 @@ class _RememberMeState extends State<RememberMe> {
                   setState(() {
                     value = newValue;
                     try {
-                      // Try to update the AuthCubit if available
                       context.read<AuthCubit>().setRememberMe(newValue);
                     } catch (e) {
-                      // Silently handle the case when AuthCubit is not yet available
+                      value = false;
                     }
                   });
                 }

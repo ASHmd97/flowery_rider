@@ -33,9 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.addListener(_onTextChanged);
   }
 
-  // Update validation state in cubit whenever text changes
   void _onTextChanged() {
-    // Call cubit's validateForm method
     context.read<AuthCubit>().validateForm(
           emailController.text,
           passwordController.text,
@@ -143,10 +141,9 @@ class _LoginPageState extends State<LoginPage> {
                           : AppColors.disableButton,
                     ),
                     onPressed: state.signInState is BaseLoadingState
-                        ? null // Disable button when loading
+                        ? null 
                         : () {
                             if (formKey.currentState!.validate()) {
-                              // Perform login action
                               context.read<AuthCubit>().login(
                                     emailController.text.trim(),
                                     passwordController.text,
