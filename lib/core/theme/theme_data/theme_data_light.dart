@@ -21,13 +21,14 @@ ThemeData getLightTheme() => ThemeData(
         ),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.scaffoldBackground,
+        backgroundColor: Colors.transparent,
         foregroundColor: AppColors.black,
         titleTextStyle: getMediumStyle(
           color: AppColors.black,
           fontSize: 20.sp,
         ),
         centerTitle: false,
+        elevation: 0,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(

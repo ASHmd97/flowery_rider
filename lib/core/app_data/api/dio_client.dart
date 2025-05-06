@@ -1,5 +1,6 @@
 // core/app_data/api/dio_client.dart
 import 'package:dio/dio.dart';
+import 'package:flowery_rider/core/app_data/api/api_constants.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
@@ -21,7 +22,7 @@ class DioApiClient implements ApiClient {
 
   DioApiClient(this.localStorage, this.errorHandler, this._appNavigator)
       : _dio = Dio(BaseOptions(
-          baseUrl: 'https://flower.elevateegy.com/api/v1/',
+          baseUrl: ApiConstants.baseUrl,
           connectTimeout: const Duration(seconds: 10),
           receiveTimeout: const Duration(seconds: 10),
           responseType: ResponseType.json,

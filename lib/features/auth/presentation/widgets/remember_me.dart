@@ -22,7 +22,7 @@ class _RememberMeState extends State<RememberMe> {
     super.initState();
     try {
       value = context.read<AuthCubit>().rememberMe;
-        } catch (e) {
+    } catch (e) {
       value = false;
     }
   }

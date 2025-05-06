@@ -93,4 +93,28 @@ class Validator {
     }
     return null;
   }
+
+  static String? validateVehicleNumber(String? vehicleNumber) {
+    final RegExp vehicleNumberRegex = RegExp(
+      r'^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$',
+    );
+    if (vehicleNumber == null || vehicleNumber.trim().isEmpty) {
+      return LocaleKeys.validation_required.tr();
+    } else if (vehicleNumberRegex.hasMatch(vehicleNumber) == false) {
+      return LocaleKeys.validation_vehicleNumber.tr();
+    } else {
+      return null;
+    }
+  }
+
+  static String? validateRequired(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return LocaleKeys.validation_required.tr();
+    }
+    return null;
+  }
+
+  static String? emailValidation(String? email) {
+    return emailValidate(email);
+  }
 }

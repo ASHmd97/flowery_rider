@@ -9,4 +9,14 @@ abstract class AuthRepo {
 
   //-----------------------------Check Login Status-----------------------------------
   Future<bool> isUserLoggedIn();
+
+  //-----------------------------Forgot Password-----------------------------------
+  Future<Either<Exception, String>> forgotPassword(String email);
+
+  //-----------------------------Verify OTP Code-----------------------------------
+  Future<Either<Exception, String>> verifyOtpCode(String email, String code);
+
+  //-----------------------------Reset Password-----------------------------------
+  Future<Either<Exception, AuthResponseEntity>> resetPassword(
+      String email, String password);
 }

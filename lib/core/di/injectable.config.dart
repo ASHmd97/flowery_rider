@@ -29,6 +29,8 @@ import 'package:flowery_rider/features/auth/data/datasource/remote_data_source/a
 import 'package:flowery_rider/features/auth/data/repo/auth_repo.dart' as _i875;
 import 'package:flowery_rider/features/auth/domain/repo/auth_repo.dart'
     as _i1032;
+import 'package:flowery_rider/features/auth/domain/use_case/forgetpassword_usecase.dart'
+    as _i117;
 import 'package:flowery_rider/features/auth/domain/use_case/login_usecase.dart'
     as _i245;
 import 'package:flowery_rider/features/auth/presentation/cubit/auth_cubit.dart'
@@ -88,11 +90,20 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i692.AuthRemoteDataSourceContract>(),
           gh<_i816.AuthLocalDataSourceContract>(),
         ));
+    gh.factory<_i117.ForgotPasswordUseCase>(
+        () => _i117.ForgotPasswordUseCase(gh<_i1032.AuthRepo>()));
+    gh.factory<_i117.VerifyOtpCodeUseCase>(
+        () => _i117.VerifyOtpCodeUseCase(gh<_i1032.AuthRepo>()));
+    gh.factory<_i117.ResetPasswordUseCase>(
+        () => _i117.ResetPasswordUseCase(gh<_i1032.AuthRepo>()));
     gh.factory<_i245.LoginUseCase>(
         () => _i245.LoginUseCase(gh<_i1032.AuthRepo>()));
     gh.factory<_i908.AuthCubit>(() => _i908.AuthCubit(
           gh<_i245.LoginUseCase>(),
           gh<_i1032.AuthRepo>(),
+          gh<_i117.ForgotPasswordUseCase>(),
+          gh<_i117.VerifyOtpCodeUseCase>(),
+          gh<_i117.ResetPasswordUseCase>(),
         ));
     return this;
   }

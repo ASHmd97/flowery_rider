@@ -7,7 +7,7 @@ import 'package:flowery_rider/core/theme/app_styles.dart';
 import 'package:flowery_rider/core/utils/validator.dart';
 import 'package:flowery_rider/core/widget/dialog_utils.dart';
 import 'package:flowery_rider/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:flowery_rider/features/auth/presentation/widget/remember_me.dart';
+import 'package:flowery_rider/features/auth/presentation/widgets/remember_me.dart';
 import 'package:flowery_rider/generated/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                           : AppColors.disableButton,
                     ),
                     onPressed: state.signInState is BaseLoadingState
-                        ? null 
+                        ? null
                         : () {
                             if (formKey.currentState!.validate()) {
                               context.read<AuthCubit>().login(

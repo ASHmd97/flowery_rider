@@ -56,4 +56,61 @@ class AuthRepositoryImpl implements AuthRepo {
       return false;
     }
   }
+
+  @override
+  Future<Either<Exception, String>> forgotPassword(String email) async {
+    try {
+      final result = await _remoteDataSource.forgotPassword(email);
+
+      return result.fold(
+        (exception) => Left(Exception(exception.message)),
+        (message) => Right(message),
+      );
+    } catch (e) {
+      return Left(Exception('Forgot password request failed: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, String>> verifyOtpCode(
+      String email, String code) async {
+    try {
+      final result = await _remoteDataSource.verifyOtpCode(email, code);
+
+      return result.fold(
+        (exception) => Left(Exception(exception.message)),
+        (status) => Right(status),
+      );
+    } catch (e) {
+      return Left(Exception('OTP verification failed: ${e.toString()}'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, AuthResponseEntity>> resetPassword(
+      String email, String password) async {
+    try {
+      final result = await _remoteDataSource.resetPassword(email, password);
+
+      return result.fold(
+        (exception) => Left(Exception(exception.message)),
+        (loginResponse) {
+          if (loginResponse.token != null) {
+            // Save the new token to local storage after password reset
+            _localDataSource.cacheToken(loginResponse.token!);
+            _localDataSource.cacheRememberMe(true);
+
+            return Right(AuthResponseEntity(
+              message: loginResponse.message,
+              token: loginResponse.token,
+            ));
+          } else {
+            return Left(Exception('Password reset failed: Token is null'));
+          }
+        },
+      );
+    } catch (e) {
+      return Left(Exception('Password reset failed: ${e.toString()}'));
+    }
+  }
 }
