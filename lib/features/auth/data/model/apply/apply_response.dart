@@ -1,5 +1,5 @@
 // features/auth/data/model/apply/apply_response.dart
-import 'package:flowery_rider/features/auth/data/model/apply/apply_response/driver.dart';
+import 'package:flowery_rider/features/auth/domain/entities/driver.dart';
 
 class ApplyResponse {
   final bool success;
@@ -22,4 +22,6 @@ class ApplyResponse {
       token: json['token'],
     );
   }
+  
+
 }

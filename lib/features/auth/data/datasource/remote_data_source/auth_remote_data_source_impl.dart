@@ -1,5 +1,8 @@
 // features/auth/data/datasource/remote_data_source/auth_remote_data_source_impl.dart
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:flowery_rider/core/app_data/api/api_client.dart';
 import 'package:flowery_rider/core/app_data/api/api_constants.dart';
@@ -99,7 +102,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSourceContract {
   Future<Either<ApiException, LoginResponse>> resetPassword(
       String email, String password) async {
     try {
-      // Use PUT method for password reset as specified by the API
       final response = await _apiClient.put(
         ApiConstants.resetPasswordEndPoint,
         data: {
@@ -118,8 +120,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSourceContract {
   }
 
   @override
-  Future<Either<ApiException, ApplyResponse>> apply(ApplyRequest request) {
-    // TODO: implement apply
-    throw UnimplementedError();
+  Future<Either<ApiException, ApplyResponse>> apply(
+      ApplyRequest request) async {
+    try {
+      final formData = await request.toFormData();
+
+      final response = await _apiClient.post(
+        ApiConstants.applyDriverEndPoint,
+        data: formData,
+        requiresToken: false,
+      );
+
+      return Right(ApplyResponse.fromJson(response));
+    } catch (e) {
+      Log.e('Error during driver application: $e');
+      return Left(ApiException(message: 'Failed to submit application: $e'));
+    }
   }
 }

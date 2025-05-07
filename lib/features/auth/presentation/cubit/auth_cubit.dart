@@ -3,10 +3,14 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flowery_rider/core/base/base_state.dart';
 import 'package:flowery_rider/core/utils/validator.dart';
-import 'package:flowery_rider/features/auth/domain/entities/auth_reponse.dart';
+import 'package:flowery_rider/features/auth/data/model/login/login_response.dart';
+import 'package:flowery_rider/features/auth/data/model/forgetpassword/resetpassword_response.dart';
+import 'package:flowery_rider/features/auth/domain/entities/apply_entity.dart';
 import 'package:flowery_rider/features/auth/domain/repo/auth_repo.dart';
+import 'package:flowery_rider/features/auth/domain/use_case/apply_usecase.dart';
 import 'package:flowery_rider/features/auth/domain/use_case/forgetpassword_usecase.dart';
 import 'package:flowery_rider/features/auth/domain/use_case/login_usecase.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 part 'auth_state.dart';
@@ -20,6 +24,7 @@ class AuthCubit extends Cubit<AuthState> {
   final ForgotPasswordUseCase? _forgotPasswordUseCase;
   final VerifyOtpCodeUseCase? _verifyOtpCodeUseCase;
   final ResetPasswordUseCase? _resetPasswordUseCase;
+  final ApplyUseCase? _applyUseCase;
 
   bool rememberMe = false;
   bool _isFormValid = false;
@@ -27,13 +32,14 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this._signInUseCase, this._authRepo,
       [this._forgotPasswordUseCase,
       this._verifyOtpCodeUseCase,
-      this._resetPasswordUseCase])
+      this._resetPasswordUseCase,
+      this._applyUseCase])
       : super(AuthState(
           signInState: BaseInitialState(),
           forgotPasswordState: BaseInitialState(),
           verifyOtpState: BaseInitialState(),
           resetPasswordState: BaseInitialState(),
-          authResponse: null,
+          applyState: BaseInitialState(),
         ));
 
   void setRememberMe(bool value) {
@@ -55,12 +61,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   bool get isFormValid => _isFormValid;
 
-  // Check if a user is already logged in
   Future<bool> isUserLoggedIn() async {
     final isLoggedIn = await _authRepo.isUserLoggedIn();
     if (isLoggedIn) {
       emit(state.copyWith(
-        signInState: BaseSuccessState<AuthResponseEntity>(data: null),
+        signInState: BaseSuccessState<LoginResponse>(data: null),
       ));
     }
     return isLoggedIn;
@@ -87,10 +92,9 @@ class AuthCubit extends Cubit<AuthState> {
       final result = await _signInUseCase(email, password, rememberMe);
 
       if (result.isRight) {
-        final authResponse = result.right;
+        final loginResponse = result.right;
         emit(state.copyWith(
-          signInState: BaseSuccessState<AuthResponseEntity>(data: authResponse),
-          authResponse: authResponse,
+          signInState: BaseSuccessState<LoginResponse>(data: loginResponse),
         ));
       } else {
         emit(state.copyWith(
@@ -104,9 +108,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // Forgot Password Methods
 
-  // 1. Request password reset
   Future<void> requestPasswordReset(String email) async {
     if (email.isEmpty || Validator.emailValidate(email) != null) {
       emit(state.copyWith(
@@ -191,11 +193,10 @@ class AuthCubit extends Cubit<AuthState> {
       final result = await _resetPasswordUseCase!(email, password);
 
       if (result.isRight) {
-        final authResponse = result.right;
+        final resetResponse = result.right;
         emit(state.copyWith(
           resetPasswordState:
-              BaseSuccessState<AuthResponseEntity>(data: authResponse),
-          authResponse: authResponse,
+              BaseSuccessState<ResetpasswordResponse>(data: resetResponse),
         ));
       } else {
         emit(state.copyWith(
@@ -209,7 +210,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // Reset states when navigating between screens
   void resetForgotPasswordState() {
     emit(state.copyWith(forgotPasswordState: BaseInitialState()));
   }
@@ -220,5 +220,43 @@ class AuthCubit extends Cubit<AuthState> {
 
   void resetPasswordResetState() {
     emit(state.copyWith(resetPasswordState: BaseInitialState()));
+  }
+  
+  // Apply as Driver Methods
+  Future<void> apply(ApplyEntity entity) async {
+    emit(state.copyWith(applyState: BaseLoadingState()));
+    
+    try {
+
+            if (entity.licensePhoto != null && entity.idPhoto != null) {
+        try {
+          final licenseExists = await entity.licensePhoto!.exists();
+          final idExists = await entity.idPhoto!.exists();
+          
+          if (!licenseExists || !idExists) {
+            emit(state.copyWith(applyState: 
+              BaseErrorState('Required files could not be accessed. Please try selecting them again.')));
+            return;
+          }
+        } catch (e) {
+          debugPrint('DEBUG: Error checking files: $e');
+        }
+      }
+
+      final result = await _authRepo.apply(entity);
+      
+      // Handle success or error
+      if (result.isRight) {
+        emit(state.copyWith(applyState: BaseSuccessState<bool>(data: result.right)));
+      } else {
+        emit(state.copyWith(applyState: BaseErrorState(result.left.toString())));
+      }
+    } catch (e) {
+      emit(state.copyWith(applyState: BaseErrorState(e.toString())));
+    }
+  }
+  
+  void resetApplyState() {
+    emit(state.copyWith(applyState: BaseInitialState()));
   }
 }

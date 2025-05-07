@@ -96,7 +96,9 @@
       "confirm_password": "تأكيد كلمة المرور",
       "submit_application": "إرسال الطلب",
       "upload_required_files": "الرجاء تحميل جميع الملفات المطلوبة",
-      "file_uploaded": "تم تحميل الملف"
+      "file_uploaded": "تم تحميل الملف",
+      "processing": "جاري المعالجة...",
+      "submission_note": "قد يستغرق هذا بعض الوقت. الرجاء عدم إغلاق التطبيق."
     }
   },
   "select_vehicle_type": "اختر نوع المركبة",

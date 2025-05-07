@@ -1,5 +1,5 @@
-// features/auth/data/model/country_data.dart
-import 'package:flowery_rider/features/auth/data/model/country_model.dart';
+// features/auth/data/model/apply/country_data.dart
+import 'package:flowery_rider/features/auth/data/model/apply/country_model.dart';
 
 class CountryData {
   static List<Country> getDefaultCountries() {
@@ -34,9 +34,8 @@ class CountryData {
       ),
     ];
   }
-  
+
   static Country getDefaultCountry() {
-    // Return Egypt as the default country
     return Country(
       isoCode: 'EG',
       name: 'Egypt',

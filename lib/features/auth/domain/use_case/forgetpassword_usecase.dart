@@ -1,6 +1,6 @@
 // features/auth/domain/use_case/forgetpassword_usecase.dart
 import 'package:either_dart/either.dart';
-import 'package:flowery_rider/features/auth/domain/entities/auth_reponse.dart';
+import 'package:flowery_rider/features/auth/data/model/forgetpassword/resetpassword_response.dart';
 import 'package:flowery_rider/features/auth/domain/repo/auth_repo.dart';
 import 'package:injectable/injectable.dart';
 
@@ -35,7 +35,7 @@ class ResetPasswordUseCase {
 
   ResetPasswordUseCase(this._authRepo);
 
-  Future<Either<Exception, AuthResponseEntity>> call(
+  Future<Either<Exception, ResetpasswordResponse>> call(
       String email, String password) async {
     return await _authRepo.resetPassword(email, password);
   }

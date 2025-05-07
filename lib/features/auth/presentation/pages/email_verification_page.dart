@@ -31,7 +31,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   final _pinController = TextEditingController();
   final _pinFocusNode = FocusNode();
 
-  // Timer related variables
   Timer? _timer;
   int _secondsRemaining = 60;
   bool _isResendEnabled = false;
@@ -39,7 +38,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   @override
   void initState() {
     super.initState();
-    // Start timer when page loads
     _startTimer();
   }
 

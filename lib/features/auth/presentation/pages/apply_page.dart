@@ -1,19 +1,23 @@
 // features/auth/presentation/pages/apply_page.dart
 import 'dart:convert';
 import 'dart:io';
+import 'package:flowery_rider/core/base/base_state.dart';
 import 'package:flowery_rider/core/routes/routes.dart';
 import 'package:flowery_rider/core/theme/app_colors.dart';
 import 'package:flowery_rider/core/theme/app_styles.dart';
 import 'package:flowery_rider/core/utils/validator.dart';
 import 'package:flowery_rider/core/widget/dialog_utils.dart';
-import 'package:flowery_rider/features/auth/data/model/country_data.dart';
-import 'package:flowery_rider/features/auth/data/model/country_model.dart';
+import 'package:flowery_rider/features/auth/domain/entities/apply_entity.dart';
+import 'package:flowery_rider/features/auth/data/model/apply/country_data.dart';
+import 'package:flowery_rider/features/auth/data/model/apply/country_model.dart';
+import 'package:flowery_rider/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:flowery_rider/features/auth/presentation/widgets/apply_widgets/form_section.dart';
 import 'package:flowery_rider/features/auth/presentation/widgets/apply_widgets/gender_selection.dart';
 import 'package:flowery_rider/features/auth/presentation/widgets/apply_widgets/searchable_dropdown_field.dart';
 import 'package:flowery_rider/features/auth/presentation/widgets/apply_widgets/upload_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flowery_rider/generated/locale_keys.g.dart';
@@ -128,18 +132,6 @@ class _ApplyPageState extends State<ApplyPage> {
         );
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          LocaleKeys.auth_apply_title.tr(),
-        ),
-      ),
-      body: _buildBody(),
-    );
   }
 
   Widget _buildBody() {
@@ -325,7 +317,7 @@ class _ApplyPageState extends State<ApplyPage> {
           ),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: _emailController,
-          validator: Validator.emailValidation,
+          validator: Validator.emailValidate,
           keyboardType: TextInputType.emailAddress,
         ),
         TextFormField(
@@ -420,52 +412,111 @@ class _ApplyPageState extends State<ApplyPage> {
   }
 
   Widget _buildSubmitButton() {
-    return ElevatedButton(
-      onPressed: _isSubmitting ? null : _submitForm,
-      child: _isSubmitting
-          ? const CircularProgressIndicator(color: Colors.white)
-          : Text(
-              LocaleKeys.auth_apply_submit_application.tr(),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ElevatedButton(
+          onPressed: _isSubmitting ? null : _submitForm,
+          child: _isSubmitting
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2.5)),
+                    const SizedBox(width: 10),
+                    Text(LocaleKeys.auth_apply_processing.tr()),
+                  ],
+                )
+              : Text(LocaleKeys.auth_apply_submit_application.tr()),
+        ),
+      ],
     );
   }
 
+  bool _validateForm() {
+    if (!_formKey.currentState!.validate()) {
+      return false;
+    }
+
+    if (_licensePhoto == null || _idPhoto == null) {
+      GetIt.I<DialogUtils>().showSnackBar(
+        textColor: Colors.white,
+        message: LocaleKeys.auth_apply_upload_required_files.tr(),
+        context: context,
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  void _setLoading(bool isLoading) {
+    setState(() {
+      _isSubmitting = isLoading;
+    });
+  }
+
   Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      if (_licensePhoto == null || _idPhoto == null) {
-        GetIt.I<DialogUtils>().showSnackBar(
-          textColor: Colors.white,
-          message: LocaleKeys.auth_apply_upload_required_files.tr(),
-          context: context,
-        );
-        return;
-      }
-      setState(() {
-        _isSubmitting = true;
-      });
-      try {
-        await Future.delayed(const Duration(seconds: 2));
-        if (mounted) {
+    if (!_validateForm()) return;
+
+    _setLoading(true);
+
+    final entity = ApplyEntity.fromFormData(
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      email: _emailController.text,
+      phone: _phoneController.text,
+      countryCode: _selectedCountry?.phoneCode ?? '+20',
+      gender: _gender,
+      vehicleType: _selectedVehicleType ?? 'Car',
+      vehicleNumber: _vehicleNumberController.text,
+      idNumber: _idNumberController.text,
+      password: _passwordController.text,
+      licensePhoto: _licensePhoto,
+      idPhoto: _idPhoto,
+    );
+
+    context.read<AuthCubit>().apply(entity);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AuthCubit, AuthState>(
+      listenWhen: (previous, current) =>
+          previous.applyState != current.applyState,
+      listener: (context, state) {
+        if (state.applyState is BaseLoadingState) {
+          setState(() {
+            _isSubmitting = true;
+          });
+        } else if (state.applyState is BaseSuccessState) {
+          setState(() {
+            _isSubmitting = false;
+          });
           Navigator.pushReplacementNamed(
             context,
             Routes.successApply,
           );
-        }
-      } catch (e) {
-        if (mounted) {
-          GetIt.I<DialogUtils>().showSnackBar(
-            textColor: AppColors.error,
-            message: 'Error: ${e.toString()}',
-            context: context,
-          );
-        }
-      } finally {
-        if (mounted) {
+        } else if (state.applyState is BaseErrorState) {
           setState(() {
             _isSubmitting = false;
           });
+          GetIt.I<DialogUtils>().showSnackBar(
+            textColor: AppColors.error,
+            message: (state.applyState as BaseErrorState).errorMessage,
+            context: context,
+          );
         }
-      }
-    }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(LocaleKeys.auth_apply_title.tr()),
+        ),
+        body: _buildBody(),
+      ),
+    );
   }
 }

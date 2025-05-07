@@ -4,6 +4,7 @@ import 'package:flowery_rider/core/routes/routes.dart';
 import 'package:flowery_rider/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class ApplySuccessPage extends StatelessWidget {
   const ApplySuccessPage({super.key});
@@ -15,6 +16,20 @@ class ApplySuccessPage extends StatelessWidget {
       child: Scaffold(
         body: Stack(
           children: [
+            // Lottie background
+            Positioned.fill(
+              child: OverflowBox(
+                alignment: Alignment.center,
+                maxWidth: double.infinity,
+                maxHeight: double.infinity,
+                child: Lottie.asset(
+                  AppImage.successApplyAnimation,
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                ),
+              ),
+            ),
             // Bottom wave background
             Positioned(
               bottom: 0,

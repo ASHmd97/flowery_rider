@@ -7,14 +7,14 @@ class AuthState extends Equatable {
   final BaseState? forgotPasswordState;
   final BaseState? verifyOtpState;
   final BaseState? resetPasswordState;
-  final AuthResponseEntity? authResponse;
+  final BaseState? applyState;
 
   const AuthState({
     required this.signInState,
     this.forgotPasswordState,
     this.verifyOtpState,
     this.resetPasswordState,
-    this.authResponse,
+    this.applyState,
   });
 
   AuthState copyWith({
@@ -22,14 +22,14 @@ class AuthState extends Equatable {
     BaseState? forgotPasswordState,
     BaseState? verifyOtpState,
     BaseState? resetPasswordState,
-    AuthResponseEntity? authResponse,
+    BaseState? applyState,
   }) {
     return AuthState(
       signInState: signInState ?? this.signInState,
       forgotPasswordState: forgotPasswordState ?? this.forgotPasswordState,
       verifyOtpState: verifyOtpState ?? this.verifyOtpState,
       resetPasswordState: resetPasswordState ?? this.resetPasswordState,
-      authResponse: authResponse ?? this.authResponse,
+      applyState: applyState ?? this.applyState,
     );
   }
 
@@ -39,6 +39,6 @@ class AuthState extends Equatable {
         forgotPasswordState,
         verifyOtpState,
         resetPasswordState,
-        authResponse,
+        applyState,
       ];
 }

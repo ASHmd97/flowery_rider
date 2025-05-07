@@ -33,7 +33,10 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
     case Routes.apply:
       return MaterialPageRoute(
         settings: settings,
-        builder: (_) => const ApplyPage(),
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<AuthCubit>(),
+          child: const ApplyPage(),
+        ),
       );
 
     case Routes.successApply:
