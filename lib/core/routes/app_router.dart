@@ -10,6 +10,10 @@ import 'package:flowery_rider/features/auth/presentation/pages/login_page.dart';
 import 'package:flowery_rider/features/auth/presentation/pages/resetpassword_page.dart';
 import 'package:flowery_rider/features/home/home.dart';
 import 'package:flowery_rider/features/onboarding/onboarding.dart';
+<<<<<<< HEAD
+=======
+import 'package:flowery_rider/features/success-screen/order_success.dart';
+>>>>>>> 3c9c483 (OrderSuccess)
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,6 +25,15 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
         builder: (_) => const Onboarding(),
       );
 
+<<<<<<< HEAD
+=======
+      case Routes.ordersuccess:
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (_) =>  OrderSuccess(),
+      );
+
+>>>>>>> 3c9c483 (OrderSuccess)
     case Routes.login:
       return MaterialPageRoute(
         settings: settings,

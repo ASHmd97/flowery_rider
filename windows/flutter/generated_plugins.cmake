@@ -4,6 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
+<<<<<<< HEAD
+=======
+  file_selector_windows
+>>>>>>> 3c9c483 (OrderSuccess)
   flutter_secure_storage_windows
 )
 
