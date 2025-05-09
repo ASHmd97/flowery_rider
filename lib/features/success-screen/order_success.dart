@@ -14,14 +14,15 @@ class _OrderSuccessState extends State<OrderSuccess>
   @override
   void initState() {
     super.initState();
-
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 2))
           ..repeat(reverse: true);
-    _animation = Tween<double>(begin: 80.0, end: 120.0).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    _animation = Tween<double>(begin: 80.0, end: 120.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
@@ -38,30 +39,37 @@ class _OrderSuccessState extends State<OrderSuccess>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) => Container(
-                width: _animation.value,
-                height: _animation.value,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.green.withOpacity(0.2),
-                ),
-                child: Center(
-                  child: Container(
+            // أنيميشن داخل SizedBox بثابت الارتفاع
+            SizedBox(
+              height: 120,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) => Container(
+                      width: _animation.value,
+                      height: _animation.value,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.green.withOpacity(0.2),
+                      ),
+                    ),
+                  ),
+                  Container(
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.green,
                     ),
-                    child: Icon(Icons.check, color: Colors.white, size: 30),
+                    child: const Icon(Icons.check, color: Colors.white, size: 30),
                   ),
-                ),
+                ],
               ),
             ),
-            SizedBox(height: 30),
-            Text(
+            const SizedBox(height: 30),
+            const Text(
               'Thank you!!',
               style: TextStyle(
                 fontSize: 22,
@@ -69,30 +77,30 @@ class _OrderSuccessState extends State<OrderSuccess>
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'The order delivered\nsuccessfully',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 18, color: Colors.black87),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: ElevatedButton(
                 onPressed: () {
-                 Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => Onboarding()),
-              );  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => Onboarding()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.pink.shade700,
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Done',
                   style: TextStyle(fontSize: 16),
                 ),
