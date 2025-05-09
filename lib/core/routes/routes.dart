@@ -11,9 +11,6 @@ class Routes {
   static const String profile = '/profile';
   static const String settings = '/settings';
   static const String notifications = '/notifications';
-<<<<<<< HEAD
-=======
   static const String ordersuccess = '/ordersuccess';
->>>>>>> 3c9c483 (OrderSuccess)
   
 }
