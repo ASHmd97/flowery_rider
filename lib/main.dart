@@ -1,0 +1,62 @@
+// main.dart
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flowery_rider/core/di/injectable.dart';
+import 'package:flowery_rider/core/routes/app_router.dart';
+import 'package:flowery_rider/core/routes/navigator_observer.dart';
+import 'package:flowery_rider/core/routes/routes.dart';
+import 'package:flowery_rider/core/theme/theme_data/theme_data_light.dart';
+import 'package:flowery_rider/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// global variable
+bool? isUserLoggedInAutomatically;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  await configureDependencies().then(
+    (_) async {
+      isUserLoggedInAutomatically = await getIt<AuthCubit>().checkAutoLogin();
+    },
+  );
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ar'),
+      ],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: const FloweryRider(),
+    ),
+  );
+}
+
+class FloweryRider extends StatelessWidget {
+  const FloweryRider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        navigatorObservers: [getIt<AppNavigatorObserver>()],
+        initialRoute: isUserLoggedInAutomatically == true
+            ? Routes.home
+            : Routes.successorder,
+        onGenerateRoute: generateRoute,
+        theme: getLightTheme(),
+        darkTheme: ThemeData(),
+        themeMode: ThemeMode.light,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+      ),
+    );
+  }
+}

@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # قواعد للتحكم في الأسطر الفاضية والمسافات
+    empty_statements: true
+    avoid_empty_else: true
+    prefer_single_quotes: true
+    # قواعد إضافية لتنظيف الكود
+    unnecessary_new: true
+    unnecessary_this: true
+
+analyzer:
+  errors:
+    empty_statements: warning
+    avoid_empty_else: warning
