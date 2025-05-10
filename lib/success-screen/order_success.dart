@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 class SuccessOrderPage extends StatelessWidget {
-  const SuccessOrderPage({super.key});Success_Order_Page
+  const SuccessOrderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
